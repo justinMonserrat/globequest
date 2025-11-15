@@ -45,6 +45,18 @@ npm start
 
 The app will open at `http://localhost:3000`
 
+## Deployment to Netlify
+
+See `NETLIFY_SETUP.md` for detailed instructions on setting up environment variables in Netlify.
+
+**Quick steps:**
+1. Push your code to GitHub
+2. Connect your repository to Netlify
+3. Add environment variables in Netlify Dashboard:
+   - `REACT_APP_SUPABASE_URL`
+   - `REACT_APP_SUPABASE_ANON_KEY`
+4. Deploy!
+
 ## Routes
 
 - `/` - Landing page with daily challenges
