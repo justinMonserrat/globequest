@@ -4,12 +4,18 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  # Disable secrets scanning for build output (Supabase anon key is intentionally public)
+  SECRETS_SCAN_OMIT_KEYS = "REACT_APP_SUPABASE_ANON_KEY"
+  SECRETS_SCAN_OMIT_PATHS = "build/**"
 
 # Environment variables should be set in Netlify Dashboard:
 # Site settings → Environment variables
 # Add:
 # - REACT_APP_SUPABASE_URL
 # - REACT_APP_SUPABASE_ANON_KEY
+#
+# Note: The anon key is intentionally public and safe to expose in client-side code.
+# Security is handled by Supabase Row Level Security (RLS) policies.
 
 [[redirects]]
   from = "/*"

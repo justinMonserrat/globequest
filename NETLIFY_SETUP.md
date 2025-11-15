@@ -43,3 +43,9 @@ REACT_APP_SUPABASE_ANON_KEY=your-anon-key-here
 
 **Note:** The `.env` file is already in `.gitignore` and won't be committed to Git.
 
+## About the Supabase Anon Key
+
+The Supabase anon key is **intentionally public** and safe to expose in client-side code. It's designed to be included in your JavaScript bundle. Security is handled by Supabase's Row Level Security (RLS) policies, not by hiding the key.
+
+If Netlify's secrets scanner flags it, you can safely ignore it or configure Netlify to skip scanning for this key (already configured in `netlify.toml`).
+
