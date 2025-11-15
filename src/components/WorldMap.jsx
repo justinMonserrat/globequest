@@ -1,6 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
-import countriesData from '../data/countries-110m.json';
 import countryNameToISO from '../data/countryNameToISO';
 import './WorldMap.css';
 
@@ -13,7 +12,32 @@ const WorldMap = ({
     regionCountries = [], // Countries in current region for filtering
 }) => {
     const [position, setPosition] = useState({ coordinates: [0, 0], zoom: 1 });
+    const [countriesData, setCountriesData] = useState(null);
+    const [loading, setLoading] = useState(true);
     const mapRef = useRef(null);
+
+    // Load map data from CDN
+    useEffect(() => {
+        const loadMapData = async () => {
+            try {
+                const response = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+                const data = await response.json();
+                setCountriesData(data);
+            } catch (error) {
+                console.error('Error loading map data:', error);
+                // Fallback to local file if CDN fails
+                try {
+                    const localData = await import('../data/countries-110m.json');
+                    setCountriesData(localData.default || localData);
+                } catch (localError) {
+                    console.error('Error loading local map data:', localError);
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadMapData();
+    }, []);
     
     // Convert arrays to Sets for faster lookup
     const unlockedSet = new Set(unlockedCountries);
@@ -50,6 +74,17 @@ const WorldMap = ({
     const handleResetZoom = () => {
         setPosition({ coordinates: [0, 0], zoom: 1 });
     };
+
+    if (loading || !countriesData) {
+        return (
+            <div className="world-map-container w-full max-w-6xl mx-auto overflow-hidden relative flex items-center justify-center min-h-[400px]">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading map...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="world-map-container w-full max-w-6xl mx-auto overflow-hidden relative">

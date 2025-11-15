@@ -32,3 +32,6 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+
+# Large data files (loaded from CDN at runtime)
+src/data/countries-110m.json

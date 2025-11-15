@@ -1,15 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { geoPath, geoMercator } from 'd3-geo';
 import { feature } from 'topojson-client';
-import countriesData from '../../data/countries-110m.json';
 import countryNameToISO from '../../data/countryNameToISO';
 
 const CountryOutlineSVG = ({ countryCode, countryName }) => {
   const [pathData, setPathData] = useState(null);
   const [viewBox, setViewBox] = useState('0 0 400 300');
+  const [countriesData, setCountriesData] = useState(null);
+
+  // Load map data from CDN
+  useEffect(() => {
+    const loadMapData = async () => {
+      try {
+        const response = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+        const data = await response.json();
+        setCountriesData(data);
+      } catch (error) {
+        console.error('Error loading map data:', error);
+        // Fallback to local file if CDN fails
+        try {
+          const localData = await import('../../data/countries-110m.json');
+          setCountriesData(localData.default || localData);
+        } catch (localError) {
+          console.error('Error loading local map data:', localError);
+        }
+      }
+    };
+    loadMapData();
+  }, []);
 
   useEffect(() => {
     if (!countryCode && !countryName) return;
+    if (!countriesData) return;
 
     try {
       // Convert TopoJSON to GeoJSON
@@ -38,7 +60,7 @@ const CountryOutlineSVG = ({ countryCode, countryName }) => {
     } catch (error) {
       console.error('Error rendering country outline:', error);
     }
-  }, [countryCode, countryName]);
+  }, [countryCode, countryName, countriesData]);
 
   if (!pathData) {
     return (
