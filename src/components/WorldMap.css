@@ -1,0 +1,48 @@
+/* WorldMap Component Styles */
+.world-map-container {
+    width: 100%;
+    max-width: 6xl;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    max-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.world-map-container svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    touch-action: none;
+    max-height: 600px;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure all geography paths are clickable */
+.world-map-container svg path {
+    pointer-events: all !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove any default SVG pointer-events blocking */
+.world-map-container svg * {
+    pointer-events: all !important;
+}
+
+/* Hover effects for unlocked countries */
+.world-map-container svg path:hover {
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+}
+
+/* Ensure the map container doesn't block clicks */
+.world-map-container>* {
+    pointer-events: auto;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}

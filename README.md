@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# GlobeQuest
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A geography RPG game built with React where you explore the world, unlock regions, and test your knowledge with daily challenges.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Daily Challenges**: Test your geography knowledge with daily country outline and flag guessing challenges (no account required)
+- **Quest Mode**: Unlock regions, gain XP, and explore countries (requires account)
+- **Authentication**: Secure user accounts with Supabase
+- **Interactive World Map**: Click on unlocked countries to learn about them
 
-### `npm start`
+## Setup
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 1. Install Dependencies
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+npm install
+```
 
-### `npm test`
+### 2. Configure Supabase
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Create a project at [Supabase](https://supabase.com)
+2. Get your project URL and anon key from Project Settings → API
+3. Create a `.env` file in the root directory:
 
-### `npm run build`
+```env
+REACT_APP_SUPABASE_URL=your_supabase_project_url
+REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. **Set up the database tables**:
+   - Go to your Supabase project → SQL Editor
+   - Run the migration files from `supabase/migrations/` in order:
+     - `001_create_profiles.sql`
+     - `002_create_country_progress.sql`
+     - `003_create_region_progress.sql`
+     - `004_add_profile_customization.sql`
+   - See `supabase/README.md` for detailed instructions
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 3. Run the App
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+```
 
-### `npm run eject`
+The app will open at `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Routes
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `/` - Landing page with daily challenges
+- `/login` - User login
+- `/signup` - User registration
+- `/quest` - Quest mode (protected route, requires login)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Project Structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+src/
+├── components/
+│   ├── auth/          # Authentication components
+│   ├── daily/         # Daily challenge components
+│   └── ...            # Other components
+├── context/            # React contexts (AuthContext)
+├── data/              # Static data files
+├── lib/               # Utility libraries (Supabase client)
+├── pages/             # Page components
+└── ...
+```
 
-## Learn More
+## Technologies
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- React 18
+- React Router DOM
+- Supabase (Authentication)
+- Tailwind CSS
+- react-simple-maps
+- d3-geo
