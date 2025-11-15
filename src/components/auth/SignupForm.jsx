@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase, isSupabaseConfigured } from '../../lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 
 const SignupForm = () => {
@@ -9,6 +9,23 @@ const SignupForm = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Check if Supabase is configured
+  if (!isSupabaseConfigured()) {
+    return (
+      <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg">
+        <p className="font-semibold mb-2">⚠️ Supabase Not Configured</p>
+        <p className="text-sm mb-2">
+          Authentication is not available because Supabase environment variables are not set.
+        </p>
+        <p className="text-sm">
+          Please set <code className="bg-yellow-100 px-1 rounded">REACT_APP_SUPABASE_URL</code> and{' '}
+          <code className="bg-yellow-100 px-1 rounded">REACT_APP_SUPABASE_ANON_KEY</code> in your Netlify dashboard
+          or local <code className="bg-yellow-100 px-1 rounded">.env</code> file.
+        </p>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
