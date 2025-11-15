@@ -1,5 +1,5 @@
 // Utility functions to generate quiz questions with real data
-import { getCountryData, getMultipleCountries } from '../../data/countryDataCache';
+import { getMultipleCountries } from '../../data/countryDataCache';
 
 export const generateFlagQuestion = async (targetCountry) => {
   try {

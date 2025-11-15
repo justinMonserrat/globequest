@@ -17,13 +17,6 @@ const CountryOutlineSVG = ({ countryCode, countryName }) => {
         setCountriesData(data);
       } catch (error) {
         console.error('Error loading map data:', error);
-        // Fallback to local file if CDN fails
-        try {
-          const localData = await import('../../data/countries-110m.json');
-          setCountriesData(localData.default || localData);
-        } catch (localError) {
-          console.error('Error loading local map data:', localError);
-        }
       }
     };
     loadMapData();

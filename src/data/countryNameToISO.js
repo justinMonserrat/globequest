@@ -216,12 +216,6 @@ const countryNameToISO = {
     'Falkland Is.': 'FLK',
     'Antarctica': 'ATA',
     'Fr. S. Antarctic Lands': 'ATF',
-    'Kosovo': 'XKX',
-    'N. Cyprus': 'CYP',
-    'Somaliland': 'SOM',
-    'W. Sahara': 'ESH',
-    'Palestine': 'PSE',
-    'Taiwan': 'TWN',
 };
 
 export default countryNameToISO;

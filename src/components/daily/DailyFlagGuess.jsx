@@ -49,9 +49,9 @@ const DailyFlagGuess = () => {
   // Select a random country for today (using date as seed for consistency)
   useEffect(() => {
     const fetchFlag = async () => {
+      if (!challengeDate) return; // Wait for challengeDate to be set
       setLoading(true);
-      const today = getTodayEST();
-      const seed = today.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const seed = challengeDate.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
       const index = (seed + 1) % countryCodes.length;
       const countryCode = countryCodes[index];
 
@@ -73,8 +73,10 @@ const DailyFlagGuess = () => {
       }
     };
 
-    fetchFlag();
-  }, []);
+    if (challengeDate) {
+      fetchFlag();
+    }
+  }, [challengeDate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

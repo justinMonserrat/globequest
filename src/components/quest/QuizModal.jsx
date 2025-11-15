@@ -16,19 +16,7 @@ const QuizModal = ({ country, countryData, isOpen, onClose, onComplete }) => {
   const [quizComplete, setQuizComplete] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (isOpen && countryData) {
-      generateQuestions();
-      setCurrentQuestion(0);
-      setScore(0);
-      setQuizComplete(false);
-      setSelectedAnswer(null);
-      setIsCorrect(null);
-      setLoading(true);
-    }
-  }, [isOpen, countryData]);
-
-  const generateQuestions = async () => {
+  const generateQuestions = React.useCallback(async () => {
     if (!countryData) return;
 
     setLoading(true);
@@ -101,7 +89,19 @@ const QuizModal = ({ country, countryData, isOpen, onClose, onComplete }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [countryData]);
+
+  useEffect(() => {
+    if (isOpen && countryData) {
+      generateQuestions();
+      setCurrentQuestion(0);
+      setScore(0);
+      setQuizComplete(false);
+      setSelectedAnswer(null);
+      setIsCorrect(null);
+      setLoading(true);
+    }
+  }, [isOpen, countryData, generateQuestions]);
 
   const handleAnswerSelect = (answer) => {
     if (selectedAnswer !== null) return; // Prevent changing answer

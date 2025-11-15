@@ -50,9 +50,9 @@ const DailyCountryOutline = () => {
   // Select a random country for today (using date as seed for consistency)
   useEffect(() => {
     const fetchCountry = async () => {
+      if (!challengeDate) return; // Wait for challengeDate to be set
       setLoading(true);
-      const today = getTodayEST();
-      const seed = today.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const seed = challengeDate.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
       const index = seed % countryCodes.length;
       const countryCode = countryCodes[index];
 
@@ -74,8 +74,10 @@ const DailyCountryOutline = () => {
       }
     };
 
-    fetchCountry();
-  }, []);
+    if (challengeDate) {
+      fetchCountry();
+    }
+  }, [challengeDate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
