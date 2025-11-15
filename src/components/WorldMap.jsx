@@ -89,17 +89,17 @@ const WorldMap = ({
     return (
         <div className="world-map-container w-full max-w-6xl mx-auto overflow-hidden relative">
             {/* Zoom Controls - Bottom Right */}
-            <div className="absolute bottom-2 right-2 z-20 flex gap-1">
+            <div className="absolute bottom-2 right-2 z-10 flex gap-1 pointer-events-none">
                 <button
                     onClick={handleZoomIn}
-                    className="bg-white hover:bg-gray-100 text-gray-700 font-bold w-10 h-10 rounded shadow-md border border-gray-300 transition-colors flex items-center justify-center"
+                    className="bg-white hover:bg-gray-100 text-gray-700 font-bold w-10 h-10 rounded shadow-md border border-gray-300 transition-colors flex items-center justify-center pointer-events-auto"
                     title="Zoom In"
                 >
                     +
                 </button>
                 <button
                     onClick={handleZoomOut}
-                    className="bg-white hover:bg-gray-100 text-gray-700 font-bold w-10 h-10 rounded shadow-md border border-gray-300 transition-colors flex items-center justify-center"
+                    className="bg-white hover:bg-gray-100 text-gray-700 font-bold w-10 h-10 rounded shadow-md border border-gray-300 transition-colors flex items-center justify-center pointer-events-auto"
                     title="Zoom Out"
                 >
                     −
@@ -107,7 +107,7 @@ const WorldMap = ({
                 {position.zoom !== 1 && (
                     <button
                         onClick={handleResetZoom}
-                        className="bg-white hover:bg-gray-100 text-gray-700 text-xs w-10 h-10 rounded shadow-md border border-gray-300 transition-colors flex items-center justify-center"
+                        className="bg-white hover:bg-gray-100 text-gray-700 text-xs w-10 h-10 rounded shadow-md border border-gray-300 transition-colors flex items-center justify-center pointer-events-auto"
                         title="Reset Zoom"
                     >
                         ↺
@@ -138,7 +138,8 @@ const WorldMap = ({
                             const isAvailable = availableSet.has(isoCode);
                             // If region filtering is active, only show countries in that region
                             const isInRegion = regionSet ? regionSet.has(isoCode) : true;
-                            const isClickable = isAvailable && isInRegion; // Can click if available (even if not unlocked)
+                            // Allow clicking on any country - the handler will check availability
+                            const isClickable = !!isoCode && !!onCountrySelect;
                             
                             // Hide countries not in current region when zoomed
                             if (regionSet && !isInRegion && !isUnlocked && !isAvailable) {
@@ -166,15 +167,10 @@ const WorldMap = ({
                                     key={geo.rsmKey}
                                     geography={geo}
                                     onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        if (isClickable && onCountrySelect && isoCode) {
-                                            onCountrySelect(isoCode);
-                                        }
-                                    }}
-                                    onMouseDown={(e) => {
-                                        if (isClickable) {
+                                        if (isoCode && onCountrySelect) {
                                             e.preventDefault();
+                                            e.stopPropagation();
+                                            onCountrySelect(isoCode);
                                         }
                                     }}
                                     style={{
@@ -196,7 +192,7 @@ const WorldMap = ({
                                             transition: 'all 0.2s ease',
                                         },
                                         pressed: {
-                                            fill: isUnlocked ? '#1E6B47' : isAvailable ? '#FF7F00' : '#A0A0A0',
+                                            fill: isUnlocked ? '#1E6B47' : isAvailable ? '#FF8C00' : '#A0A0A0',
                                             outline: 'none',
                                             stroke: '#FFFFFF',
                                             strokeWidth: 1,

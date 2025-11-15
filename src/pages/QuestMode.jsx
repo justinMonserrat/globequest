@@ -61,9 +61,21 @@ const QuestMode = () => {
           setXp(profile.xp);
         }
         
-        // Determine current region based on progress
+        // Determine current region based on progress and update available countries
         const regionProgress = await getRegionProgress(user.id);
+        const available = new Set(['USA', 'CAN', 'MEX']); // Start with North America
+        
         if (regionProgress && regionProgress.length > 0) {
+          // Add all countries from unlocked regions (80%+ completion)
+          regionProgress.forEach(rp => {
+            if (rp.completion_percentage >= 80) {
+              const region = regions.find(r => r.name === rp.region_name);
+              if (region) {
+                region.countries.forEach(code => available.add(code));
+              }
+            }
+          });
+          
           // Find the highest unlocked region
           const sortedRegions = regionProgress
             .filter(r => r.completion_percentage >= 80)
@@ -78,9 +90,17 @@ const QuestMode = () => {
             const nextRegionIndex = regions.findIndex(r => r.name === lastUnlocked.region_name) + 1;
             if (nextRegionIndex < regions.length) {
               setCurrentRegionIndex(nextRegionIndex);
+              // Also add the next region's countries to available
+              const nextRegion = regions[nextRegionIndex];
+              if (nextRegion) {
+                nextRegion.countries.forEach(code => available.add(code));
+              }
             }
           }
         }
+        
+        // Update available countries with all unlocked regions
+        setAvailableCountries(Array.from(available));
       } catch (error) {
         console.error('Error loading user progress:', error);
       } finally {
