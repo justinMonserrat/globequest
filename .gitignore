@@ -35,3 +35,5 @@ Thumbs.db
 
 # Large data files (loaded from CDN at runtime)
 src/data/countries-110m.json
+src/data/countries-adm0.geojson
+*.geojson
